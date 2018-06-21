@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj'// + this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/INF-406jkjiji00uszj'// + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,7 +3864,7 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-406jkjiji00uszj'// + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
@@ -3881,7 +3881,7 @@ var Notifications = function(config) {
 
 async function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
-  link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+  link.href = "./note.css";
   link.type = "text/css";
   link.rel = "stylesheet";
   link.id = "stylesheetID";
@@ -3905,7 +3905,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
   let responseNotif = (callback) => {
     splittedUrls.map(async notifName => {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config  + '?type=' + notifName;
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-406jkjiji00uszj'  + '?type=' + notifName;
       await httpGetAsync(url, function(res) {
         response = JSON.parse(res);
         responseNotifications.push({[notifName]: response});
@@ -4124,6 +4124,16 @@ var Note = function Note(config, containerStyle, iconStyle) {
     function notificationDisplay(type, config, containerStyle, iconStyle, alignment) {
       var container = document.createElement('div');
       container.setAttribute("id", "FPqR2DbIqJeA2DbI7MM9_0");
+      container.onclick = function(e) {
+        if(e.target.tagName == 'IMG')
+          return container.parentNode.removeChild(container);
+
+        if(config.configuration.notificationUrl)
+          window.open(config.configuration.notificationUrl);
+        else
+          return;
+      };
+
       container.style = alignment;
         var innerContainer = document.createElement('div');
         innerContainer.setAttribute("id", "FPqR3tRBqJeA3tRB7MM9_0");
@@ -4143,8 +4153,11 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       var notifRecentImg = document.createElement('img');
                       // var res_img = config.userDetails && config.userDetails[k]?config.userDetails[k].profile_pic:null;
                       var res_img = config.userDetails?
-                        `https://image.maps.cit.api.here.com/mia/1.6/mapview?app_id=jqBe50cRhOGMszLkt1Ab&app_code=uwZ-b66zb73TujBbVZ7iqQ&lat=${config.userDetails[k].latitude}&lon=${config.userDetails[k].longitude}&z=10&h=200&w=200`
-                        // `https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=${config.userDetails[k].latitude},${config.userDetails[k].longitude}&zoom=8&scale=2&size=100x100&sensor=false`
+                        config.configuration.toggleMap?
+                          `https://image.maps.cit.api.here.com/mia/1.6/mapview?app_id=jqBe50cRhOGMszLkt1Ab&app_code=uwZ-b66zb73TujBbVZ7iqQ&lat=${config.userDetails[k].latitude}&lon=${config.userDetails[k].longitude}&z=10&h=200&w=200`
+                        :
+                          config.userDetails[k].profile_pic
+                          // `https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyAvLJlx-AEg3Q6eJmtXwXf0pDGUWtVCit8&center=${config.userDetails[k].latitude},${config.userDetails[k].longitude}&zoom=8&scale=2&size=100x100&sensor=false`
                       :
                         null;
                       notifRecentImg.setAttribute('src', res_img?res_img:"https://www.totaldenturecare.com.au/wp-content/uploads/2017/06/default-user-image-female.png");
@@ -4152,6 +4165,12 @@ var Note = function Note(config, containerStyle, iconStyle) {
                     notifRecentImgContainer.appendChild(notifRecentImg);
                     var notifRecentContentContainer = document.createElement('div');
                     notifRecentContentContainer.className = "FPqR2EbCqJeA2EbC7MM9_0";
+                      var notificationRecentCloseContainer = document.createElement('div');
+                      notificationRecentCloseContainer.className = "FPqR2AUlqJeA2AUl7MM9_1";
+                      notificationRecentCloseContainer.style = config.rule.closeNotification?'display:flex':'display:none';
+                        var notificationRecentClose = document.createElement('img');
+                        notificationRecentClose.setAttribute('src', 'http://www.myiconfinder.com/uploads/iconsets/256-256-486a9b90c52d4de7be5c625acc8836a9.png');
+                      notificationRecentCloseContainer.append(notificationRecentClose);
                       var notifRecentContentI = document.createElement('div');
                       notifRecentContentI.className = "FPqR2AUlqJeA2AUl7MM9_0";
                       var res_name = config.userDetails && config.userDetails[k]?config.userDetails[k].username?config.userDetails[k].username:config.userDetails[k].response.json.value.form.firstname:null;
@@ -4173,7 +4192,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       notifRecentContentI.innerHTML = user_details;
                       var notifRecentContentII = document.createElement('div');
                       notifRecentContentII.className = "FPqR13BWqJeA13BW7MM9_0";
-                      notifRecentContentII.innerHTML = config.configuration.contentText;
+                      notifRecentContentII.innerHTML = "Recently signed up for "+config.configuration.contentText;
                       var notifRecentContentIII = document.createElement('div');
                       notifRecentContentIII.className = "FPqR2PlWqJeA2PlW7MM9_0";
                       var timeStamp = config.userDetails && config.userDetails[k]?config.userDetails[k].timestamp:null;
@@ -4192,6 +4211,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       notifRecentContentIV.appendChild(notifRecentContentIVSpan1);
                       notifRecentContentIV.appendChild(notifRecentContentIVInnerI);
                       notifRecentContentIV.appendChild(notifRecentContentIVSpan2);
+                    notifRecentContentContainer.appendChild(notificationRecentCloseContainer);
                     notifRecentContentContainer.appendChild(notifRecentContentI);
                     notifRecentContentContainer.appendChild(notifRecentContentII);
                     notifRecentContentContainer.appendChild(notifRecentContentIII);
@@ -4216,7 +4236,12 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var notifLiveImg = document.createElement('div');
                         notifLiveImg.className =  "FPqRh0ePqJeAh0eP7MM9_0";
                       notifLiveImgContainer.appendChild(notifLiveImg);
-
+                      var notificationLiveCloseContainer = document.createElement('div');
+                      notificationLiveCloseContainer.className = "FPqR3acHqJeA3acH7MM9_1";
+                      notificationLiveCloseContainer.style = config.rule.closeNotification?'display:flex':'display:none';
+                        var notificationLiveClose = document.createElement('img');
+                        notificationLiveClose.setAttribute('src', 'http://www.myiconfinder.com/uploads/iconsets/256-256-486a9b90c52d4de7be5c625acc8836a9.png');
+                      notificationLiveCloseContainer.append(notificationLiveClose);
                       var notifLiveContentContainerI = document.createElement('div');
                       notifLiveContentContainerI.className = "FPqR15RvqJeA15Rv7MM9_0";
                         var notifLiveContentInnerContainer = document.createElement('div');
@@ -4251,6 +4276,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                       notifLiveContentContainerII.appendChild(notifLiveContentA);
 
                     innerMainNotifLiveContainer.appendChild(notifLiveImgContainer);
+                    innerMainNotifLiveContainer.appendChild(notificationLiveCloseContainer);
                     innerMainNotifLiveContainer.appendChild(notifLiveContentContainerI);
                     innerMainNotifLiveContainer.appendChild(notifLiveContentContainerII);
 
@@ -4273,6 +4299,12 @@ var Note = function Note(config, containerStyle, iconStyle) {
 
                     var notifBulkContentContainer = document.createElement('div');
                     notifBulkContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+                      var notificationBulkCloseContainer = document.createElement('div');
+                      notificationBulkCloseContainer.className = "FPqRqu5HqJeAqu5H7MM9_1";
+                      notificationBulkCloseContainer.style = config.rule.closeNotification?'display:flex':'display:none';
+                        var notificationBulkClose = document.createElement('img');
+                        notificationBulkClose.setAttribute('src', 'http://www.myiconfinder.com/uploads/iconsets/256-256-486a9b90c52d4de7be5c625acc8836a9.png');
+                      notificationBulkCloseContainer.append(notificationBulkClose);
                       var notifBulkContentInnerContainer = document.createElement('div');
                         var notifBulkContentSpan = document.createElement('span');
                         notifBulkContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
@@ -4284,6 +4316,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                         var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentText);
+                    notifBulkContentContainer.appendChild(notificationBulkCloseContainer);
                     notifBulkContentContainer.appendChild(notifBulkContentInnerContainer);
 
                   innerInnerNotifBulkContainer.appendChild(notifBulkImgContainer);
