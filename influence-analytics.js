@@ -3958,7 +3958,7 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
         j++;
 
         if(Object.keys(responseNotifications[i]) == 'journey') {
-          if(responseNotifications[i].journey.message.userDetails.length < 16) {
+          if(responseNotifications[i].journey.message.userDetails && responseNotifications[i].journey.message.userDetails.length < 16) {
             i = 2;
           } else if(m%8 == 0) {
             i = 2
@@ -4203,12 +4203,12 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           var notifRecentContentSvg = document.createElement('img');
                           notifRecentContentSvg.setAttribute('src', 'https://useinfluence.co/images/usericon.png');
                         notifRecentContentIVInnerI.appendChild(notifRecentContentSvg);
-                        var notifRecentContentIVSpan1 = document.createElement('span');
-                        notifRecentContentIVSpan1.innerHTML = "by ";
+                        // var notifRecentContentIVSpan1 = document.createElement('span');
+                        // notifRecentContentIVSpan1.innerHTML = "by ";
                         var notifRecentContentIVSpan2 = document.createElement('span');
                         notifRecentContentIVSpan2.className = "FPqR12wMqJeA12wM7MM9_0";
                         notifRecentContentIVSpan2.innerHTML = "Influence";
-                      notifRecentContentIV.appendChild(notifRecentContentIVSpan1);
+                      // notifRecentContentIV.appendChild(notifRecentContentIVSpan1);
                       notifRecentContentIV.appendChild(notifRecentContentIVInnerI);
                       notifRecentContentIV.appendChild(notifRecentContentIVSpan2);
                     notifRecentContentContainer.appendChild(notificationRecentCloseContainer);
@@ -4313,7 +4313,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           var notifBulkContentInnerText = document.createTextNode(` ${config.configuration.visitorText}`);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerSpan);
                         notifBulkContentSpan.appendChild(notifBulkContentInnerText);
-                        var notifBulkContentText = document.createTextNode(`signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
+                        var notifBulkContentText = document.createTextNode(` signed up for ${config.configuration.contentText} in the last ${config.configuration.panelStyle.bulkData} ${config.configuration.panelStyle.selectDurationData}`);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentSpan);
                       notifBulkContentInnerContainer.appendChild(notifBulkContentText);
                     notifBulkContentContainer.appendChild(notificationBulkCloseContainer);
