@@ -3986,25 +3986,25 @@ function notificationTimeout(i, info, rule, key, notificationPath) {
     let containerStyle, iconStyle, alignment, left, bottom, top, fadein, fadeout;
     switch(displayPosition) {
       case 'Bottom Right':
-        alignment = "z-index: 10000; position: fixed; right: 10px; bottom: 0px;";
+        alignment = "z-index: 100000000; position: fixed; right: 10px; bottom: 0px;";
         break;
       case 'Bottom Left':
-        alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
+        alignment = "z-index: 100000000; position: fixed; left: 0px; bottom: 0px;";
         break;
       case 'Bottom Center':
-        alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); bottom: 0px;";
+        alignment = "z-index: 100000000; position: fixed; left: 50%; transform: translate(-50%, 0); bottom: 0px;";
         break;
       case 'Top Left':
-        alignment = "z-index: 10000; position: fixed; left: 0px; top: 10px;";
+        alignment = "z-index: 100000000; position: fixed; left: 0px; top: 10px;";
         break;
       case 'Top Right':
-        alignment = "z-index: 10000; position: fixed; right: 10px; top: 10px;";
+        alignment = "z-index: 100000000; position: fixed; right: 10px; top: 10px;";
         break;
       case 'Top Center':
-        alignment = "z-index: 10000; position: fixed; left: 50%; transform: translate(-50%, 0); top: 10px;";
+        alignment = "z-index: 100000000; position: fixed; left: 50%; transform: translate(-50%, 0); top: 10px;";
         break;
       default:
-        alignment = "z-index: 10000; position: fixed; left: 0px; bottom: 0px;";
+        alignment = "z-index: 100000000; position: fixed; left: 0px; bottom: 0px;";
     }
 
 
