@@ -1084,7 +1084,7 @@ if (typeof Influence === 'undefined') {
                 trackSubmissions: true
             }, this.options);
 
-            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + this.options.trackingId;
+            var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-405gzoijjim27n3' //+ this.options.trackingId;
             httpGetAsync(rulesUrl, (res) => {
               response = JSON.parse(res);
               notificationPath = response.notificationPath;
@@ -3842,7 +3842,7 @@ if (typeof Influence === 'undefined') {
 
 
 var checkCampaignActive = function(config, cb) {
-  var url = 'https://strapi.useinfluence.co/campaign/track/' + config;
+  var url = 'https://strapi.useinfluence.co/campaign/track/INF-405gzoijjim27n3'// + config;
   httpGetAsync(url, function(res) {
     response = JSON.parse(res);
     if(response)
@@ -3864,12 +3864,12 @@ var Notifications = function(config) {
   if (!(this instanceof Notifications)) return new Notifications(config);
   this.config = config;
   var rule, notificationPath;
-  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/' + config;
+  var rulesUrl = 'https://strapi.useinfluence.co/rules/configuration/path/INF-405gzoijjim27n3'// + config;
   httpGetAsync(rulesUrl, function(res) {
     response = JSON.parse(res);
     rule = response.rule;
     notificationPath = response.notificationPath;
-    var splittedUrls = ["live", "identification", "journey"];
+    var splittedUrls = ["live", "identification", "review", "journey"];
     notificationPath = notificationPath.filter(notifPath => notifPath.type == 'display');
     notificationPath = notificationPath.map(notifPath => notifPath.url);
     var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -3881,7 +3881,8 @@ var Notifications = function(config) {
 
 async function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
-  link.href = "https://storage.cloud.google.com/influence-197607.appspot.com/note.css";
+  // link.href = "https://storage.cloud.google.com/influence-197607.appspot.com/note.css";
+  link.href = "./note.css";
   link.type = "text/css";
   link.rel = "stylesheet";
   link.id = "stylesheetID";
@@ -3901,11 +3902,11 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
   var j = 1;
   var responseNotifications = [];
-  var loopCheckValue = rule.loopNotification?150:3;
+  var loopCheckValue = rule.loopNotification?150:4;
 
   let responseNotif = (callback) => {
     splittedUrls.map(async notifName => {
-      var url = 'https://strapi.useinfluence.co/elasticsearch/search/' + config  + '?type=' + notifName;
+      var url = 'https://strapi.useinfluence.co/elasticsearch/search/INF-405gzoijjim27n3'  + '?type=' + notifName;
       await httpGetAsync(url, function(res) {
         response = JSON.parse(res);
         responseNotifications.push({[notifName]: response});
@@ -3915,11 +3916,11 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
   }
 
   responseNotif((err, result) => {
-    let m = 4;
-    if(result.length == 3) {
+    let m = 5;
+    if(result.length == 4) {
       for (let i = 0; i < splittedUrls.length; i++) {
         if(j >  loopCheckValue) {
-          i = 4;
+          i = 5;
           return;
         }
 
@@ -3931,8 +3932,9 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
             const info = response.message;
             var randomDelayTime, tempRandomDelayTime = 0 ;
             if((key == 'journey' && !info.userDetails) ||
-                (key == 'identification' && !info.response.aggregations.users.buckets.length ||
-                  (key == 'live' && Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length)
+                (key == 'identification' && (!info.response.aggregations || !info.response.aggregations.users.buckets.length) ||
+                  (key == 'live' && (!info.response.aggregations || Number(info.configuration.panelStyle.liveVisitorCount) >= info.response.aggregations.users.buckets.length)) ||
+                    (key == 'review' && !info.response)
               )) {
               return;
             }
@@ -3959,9 +3961,9 @@ async function loopThroughSplittedNotifications(splittedUrls, rule, notification
 
         if(Object.keys(responseNotifications[i]) == 'journey') {
           if(responseNotifications[i].journey.message.userDetails && responseNotifications[i].journey.message.userDetails.length < 16) {
-            i = 2;
+            i = 3;
           } else if(m%8 == 0) {
-            i = 2
+            i = 3
             m++;
           } else {
             m++;
@@ -4249,7 +4251,7 @@ var Note = function Note(config, containerStyle, iconStyle) {
                           var notifLiveContentSpan = document.createElement('span');
                           notifLiveContentSpan.className = "FPqR1Jr6qJeA1Jr67MM9_0";
                             var notifLiveContentInnerSpan = document.createElement('span');
-                            notifLiveContentInnerSpan.innerHTML = config.response?config.response.aggregations.users.buckets.length:0;
+                            notifLiveContentInnerSpan.innerHTML = config.response.aggregations?config.response.aggregations.users.buckets.length:0;
                             var text_span = document.createTextNode(` ${config.configuration.visitorText}`);
                           notifLiveContentSpan.appendChild(notifLiveContentInnerSpan);
                           notifLiveContentSpan.appendChild(text_span);
@@ -4325,9 +4327,97 @@ var Note = function Note(config, containerStyle, iconStyle) {
                 innerNotifBulkContainer.appendChild(innerInnerNotifBulkContainer);
               notificationBulkContainer.appendChild(innerNotifBulkContainer);
 
+              var notificationReviewContainer = document.createElement('div');
+              // notificationReviewContainer.style = type=='review'?"display:block":"display:none";
+              notificationReviewContainer.style = "display:block";
+                var innerNotifReviewContainer = document.createElement('div');
+                innerNotifReviewContainer.setAttribute("id", "FPqR2lriqJeA2lri7MM9_0");
+                  var innerInnerNotifReviewContainer = document.createElement('div');
+                  innerInnerNotifReviewContainer.className = "FPqR1XogqJeA1Xog7MM9_0 FPqR27wVqJeA27wV7MM9_0";
+                  innerInnerNotifReviewContainer.style = containerStyle;
+                    var notifReviewImgContainer = document.createElement('div');
+                    notifReviewImgContainer.className = "FPqR37xpqJeA37xp7MM9_0";
+                      var notifReviewImg = document.createElement('img');
+                      notifReviewImg.setAttribute('src', 'http://diylogodesigns.com/blog/wp-content/uploads/2016/04/google-logo-icon-PNG-Transparent-Background.png')
+                    notifReviewImgContainer.appendChild(notifReviewImg);
+
+                      var starRating = document.createElement('span');
+                      starRating.className = "starRating";
+                      var rating5 = document.createElement('input');
+                      rating5.setAttribute("id", "rating5");
+                      rating5.setAttribute("type", "radio");
+                      rating5.setAttribute("value", "5");
+                      var label5 = document.createElement('label');
+                      label5.setAttribute("for", "rating5");
+
+                      var rating4 = document.createElement('input');
+                      rating4.setAttribute("id", "rating4");
+                      rating4.setAttribute("type", "radio");
+                      rating4.setAttribute("value", "4");
+                      var label4 = document.createElement('label');
+                      label4.setAttribute("for", "rating4");
+
+                      var rating3 = document.createElement('input');
+                      rating3.setAttribute("id", "rating3");
+                      rating3.setAttribute("type", "radio");
+                      rating3.setAttribute("value", "3");
+                      var label3 = document.createElement('label');
+                      label3.setAttribute("for", "rating3");
+
+                      var rating2 = document.createElement('input');
+                      rating2.setAttribute("id", "rating2");
+                      rating2.setAttribute("type", "radio");
+                      rating2.setAttribute("value", "2");
+                      var label2 = document.createElement('label');
+                      label2.setAttribute("for", "rating2");
+
+                      var rating1 = document.createElement('input');
+                      rating1.setAttribute("id", "rating1");
+                      rating1.setAttribute("type", "radio");
+                      rating1.setAttribute("value", "1");
+                      var label1 = document.createElement('label');
+                      label1.setAttribute("for", "rating1");
+
+
+                    var notifReviewContentContainer = document.createElement('div');
+                    notifReviewContentContainer.className = "FPqRqu5HqJeAqu5H7MM9_0";
+                      var notifReviewContentInnerContainer = document.createElement('div');
+
+                        var notifReviewContentSpan = document.createElement('span');
+                        notifReviewContentSpan.className = "FPqRtoc3qJeAtoc37MM9_0";
+                          var notifReviewContentInnerSpan = document.createElement('span');
+                          notifReviewContentInnerSpan.innerHTML = config.response?config.response.hits.total:0;
+                          var notifReviewContentInnerText = document.createTextNode(` marketer`);
+                          starRating.appendChild(label1);
+                          starRating.appendChild(rating1);
+                          starRating.appendChild(label2);
+                          starRating.appendChild(rating2);
+                          starRating.appendChild(label3);
+                          starRating.appendChild(rating3);
+                          starRating.appendChild(label4);
+                          starRating.appendChild(rating4);
+                          starRating.appendChild(label5);
+                          starRating.appendChild(rating5);
+                          notifReviewContentContainer.appendChild(starRating);
+                        notifReviewContentSpan.appendChild(notifReviewContentInnerSpan);
+                        notifReviewContentSpan.appendChild(notifReviewContentInnerText);
+
+                        var notifReviewContentText = document.createTextNode(` reviewed us on Google`);
+
+                      notifReviewContentInnerContainer.appendChild(notifReviewContentSpan);
+                      notifReviewContentInnerContainer.appendChild(notifReviewContentText);
+                    notifReviewContentContainer.appendChild(notifReviewContentInnerContainer);
+
+                  innerInnerNotifReviewContainer.appendChild(notifReviewImgContainer);
+                  innerInnerNotifReviewContainer.appendChild(notifReviewContentContainer);
+
+                innerNotifReviewContainer.appendChild(innerInnerNotifReviewContainer);
+              notificationReviewContainer.appendChild(innerNotifReviewContainer);
+
             mainContainer.appendChild(notificationRecentContainer);
             mainContainer.appendChild(notificationLiveContainer);
             mainContainer.appendChild(notificationBulkContainer);
+            mainContainer.appendChild(notificationReviewContainer);
           innerDiv.appendChild(mainContainer);
         innerContainer.appendChild(innerDiv);
       container.appendChild(innerContainer);
