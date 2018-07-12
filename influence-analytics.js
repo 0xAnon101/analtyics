@@ -3881,7 +3881,7 @@ var Notifications = function(config) {
 
 async function loopThroughSplittedNotifications(splittedUrls, rule, notificationPath, config) {
   var link = document.createElement("link");
-  link.href = "https://cdninfluence.nyc3.digitaloceanspaces.com/note.css";
+  link.href = "https://storage.cloud.google.com/influence-197607.appspot.com/note.css?_ga=2.214858647.-1054941905.1530466245";
   link.type = "text/css";
   link.rel = "stylesheet";
   link.id = "stylesheetID";
